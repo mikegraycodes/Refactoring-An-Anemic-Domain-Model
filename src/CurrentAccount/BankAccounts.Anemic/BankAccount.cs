@@ -1,6 +1,6 @@
 using System;
 
-namespace CurrentAccount.AnemicDomainModel
+namespace BankAccounts.Anemic
 {
     public class BankAccount
     {
@@ -8,7 +8,6 @@ namespace CurrentAccount.AnemicDomainModel
         public bool IsOpen { get; set; }
 
         public decimal Balance { get; set; }
-
         public decimal OverdraftLimit { get; set; }
     }
 }

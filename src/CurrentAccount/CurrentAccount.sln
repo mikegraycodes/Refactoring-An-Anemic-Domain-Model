@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrentAccount", "CurrentAccount\CurrentAccount.csproj", "{E1722695-3081-438D-B4A6-1E31C86CF03E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankAccounts.Anemic", "BankAccounts.Anemic\BankAccounts.Anemic.csproj", "{E1722695-3081-438D-B4A6-1E31C86CF03E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankAccounts.Rich", "BankAccounts.Rich\BankAccounts.Rich.csproj", "{5FC98444-05CD-47E1-86DA-2B5072941287}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankAccounts.Rich.Tests", "BankAccounts.Rich.Tests\BankAccounts.Rich.Tests.csproj", "{20A8CE30-1938-4924-8A54-0A6CB0A7289B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +16,13 @@ Global
 		{E1722695-3081-438D-B4A6-1E31C86CF03E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1722695-3081-438D-B4A6-1E31C86CF03E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1722695-3081-438D-B4A6-1E31C86CF03E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC98444-05CD-47E1-86DA-2B5072941287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FC98444-05CD-47E1-86DA-2B5072941287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FC98444-05CD-47E1-86DA-2B5072941287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FC98444-05CD-47E1-86DA-2B5072941287}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20A8CE30-1938-4924-8A54-0A6CB0A7289B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A8CE30-1938-4924-8A54-0A6CB0A7289B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A8CE30-1938-4924-8A54-0A6CB0A7289B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A8CE30-1938-4924-8A54-0A6CB0A7289B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

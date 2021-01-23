@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using CurrentAccount.AnemicDomainModel;
 
-namespace CurrentAccount
+namespace BankAccounts.Rich
 {
     public class Application
     {
@@ -15,18 +14,14 @@ namespace CurrentAccount
         
         public Application()
         {
-            BankAccount = new BankAccount
-            {
-                Id = Guid.NewGuid(),
-                IsOpen = true
-            };
+            BankAccount = BankAccount.Open();
         }
         
         public async Task Run()
         {
             try
             {
-                await this.SetupCommands();
+                SetupCommands();
                 DisplayMenu();
                 await WaitForCommand();
             }
@@ -52,13 +47,12 @@ namespace CurrentAccount
             WriteLine();
         }
         
-        private async Task SetupCommands()
+        private void SetupCommands()
         {
             // General commands.
             this.Commands = new();
 
             this.AddBannerCommands(this.Commands);
-            int keyCode = 1;
         }
         
         private void AddBannerCommands(List<(string KeyboadShortCut, string Prompt, Func<bool> Function)> commands)
@@ -67,7 +61,7 @@ namespace CurrentAccount
 
             commands.Add(("D", "Deposit 50", () =>
             {
-                this.BankAccount.Balance += 50;
+                this.BankAccount.DepositFunds(50);
                 
                 WriteLine($"*********", ConsoleColor.Green);
                 WriteLine("Deposited 50");
@@ -79,28 +73,20 @@ namespace CurrentAccount
 
             commands.Add(("W", "Withdraw 50", () =>
             {
-                if (this.BankAccount.Balance - 50 < BankAccount.OverdraftLimit)
-                {
-                    WriteLine($"*********", ConsoleColor.Red);
-                    WriteLine("Failed to withdraw 50 as balance would be below overdraft limit");
-                    WriteLine($"*********", ConsoleColor.Red);
-                }
-                else
-                {
-                    this.BankAccount.Balance -= 50;
-                    
-                    WriteLine($"*********", ConsoleColor.Green);
-                    WriteLine("Withdraw 50");
-                    WriteLine($"New balance {BankAccount.Balance}");
-                    WriteLine($"*********", ConsoleColor.Green);
-                }
+                this.BankAccount.WithdrawFunds(50);
+                
+                WriteLine($"*********", ConsoleColor.Green);
+                WriteLine("Withdraw 50");
+                WriteLine($"New balance {BankAccount.Balance}");
+                WriteLine($"*********", ConsoleColor.Green);
+                
 
                 return true;
             }));
             
             commands.Add(("I", "Increase overdraft by 50", () =>
             {
-                BankAccount.OverdraftLimit -= 50;
+                BankAccount.UpdateOverdraftLimit(BankAccount.OverdraftLimit + 50);
                 
                 WriteLine($"*********", ConsoleColor.Green);
                 WriteLine($"Overdraft Limit Updated To {BankAccount.OverdraftLimit}");
@@ -109,44 +95,35 @@ namespace CurrentAccount
                 return true;
             }));
             
-            commands.Add(("D", "Decrease overdraft by 50", () =>
+            commands.Add(("L", "Decrease overdraft by 50", () =>
             {
-                if (BankAccount.OverdraftLimit + 50 >= 0)
-                {
-                    WriteLine($"*********", ConsoleColor.Red);
-                    WriteLine("Overdraft Limit cannot be above 0");
-                    WriteLine($"*********", ConsoleColor.Red);     
-                }
-                else
-                {
-                    BankAccount.OverdraftLimit -= 50;
+                BankAccount.UpdateOverdraftLimit(BankAccount.OverdraftLimit - 50);
                     
-                    WriteLine($"*********", ConsoleColor.Green);
-                    WriteLine("Overdraft Limit Updated");
-                    WriteLine($"*********", ConsoleColor.Green);   
-                }
+                WriteLine($"*********", ConsoleColor.Green);
+                WriteLine("Overdraft Limit Updated");
+                WriteLine($"*********", ConsoleColor.Green);   
                 
                 return true;
             }));
             
             commands.Add(("C", "Close account", () =>
             {
-                if (BankAccount.IsOpen && BankAccount.Balance > 0)
-                {
-                    BankAccount.IsOpen = false;
-                    
-                    WriteLine($"*********", ConsoleColor.Green);
-                    WriteLine("Closeed Bank Account");
-                    WriteLine($"*********", ConsoleColor.Green);         
-                }
-                else
-                {
-                    WriteLine($"*********", ConsoleColor.Red);
-                    WriteLine("Failed To Close Bank Account");
-                    WriteLine($"*********", ConsoleColor.Red);     
-                }
+                BankAccount.Close();
                 
-
+                WriteLine($"*********", ConsoleColor.Green);
+                WriteLine("Closeed Bank Account");
+                WriteLine($"*********", ConsoleColor.Green);
+                
+                return true;
+            }));
+            
+            commands.Add(("R", "ReOpen account", () =>
+            {
+                BankAccount.ReOpen();
+                
+                WriteLine($"*********", ConsoleColor.Green);
+                WriteLine("Re-Opened Bank Account");
+                WriteLine($"*********", ConsoleColor.Green);
                 
                 return true;
             }));
@@ -195,9 +172,19 @@ namespace CurrentAccount
 
                     if (isValidCommand)
                     {
-                        var cmdResult = Commands
-                            .First(c => c.KeyboadShortCut.Equals(keyboardInput, StringComparison.OrdinalIgnoreCase))
-                            .Function();
+                        try
+                        {
+                            var cmdResult = Commands
+                                .First(c => c.KeyboadShortCut.Equals(keyboardInput, StringComparison.OrdinalIgnoreCase))
+                                .Function();
+                        }
+                        catch (InvalidOperationException e)
+                        {
+                            WriteLine($"*********", ConsoleColor.Red);
+                            WriteLine(e.Message);
+                            WriteLine($"*********", ConsoleColor.Red);     
+                        }
+
                     }
                 }
             }

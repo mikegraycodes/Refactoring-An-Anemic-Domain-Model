@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace CurrentAccount
+namespace BankAccounts.Anemic
 {
     internal class Program
     {
