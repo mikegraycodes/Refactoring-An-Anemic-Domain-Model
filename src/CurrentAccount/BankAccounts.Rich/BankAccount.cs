@@ -60,6 +60,8 @@ namespace BankAccounts.Rich
         
         public void ReOpen()
         {
+            if(IsOpen) return;
+            
             IsOpen = true;
         }
 
