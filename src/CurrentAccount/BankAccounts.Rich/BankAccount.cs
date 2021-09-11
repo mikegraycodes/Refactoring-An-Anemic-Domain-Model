@@ -30,7 +30,7 @@ namespace BankAccounts.Rich
         {
             CheckAccountNotClosed();
             
-            if (Balance - amount < overdraftLimit)
+            if (amount <= 0)
                 throw new InvalidOperationException("Amount withdrawn must be greater than 0");
             
             if (Balance - amount < overdraftLimit)
@@ -42,10 +42,10 @@ namespace BankAccounts.Rich
         public void UpdateOverdraftLimit(decimal overdraftLimit)
         {
             CheckAccountNotClosed();
-            if(Balance < overdraftLimit * -1) 
-                throw new InvalidOperationException("Overdraft limit cannot be lower than current account balance");
             if(overdraftLimit < 0) 
                 throw new InvalidOperationException("Overdraft limit cannot be less than 0");
+            if (Balance < overdraftLimit * -1)
+                throw new InvalidOperationException("Overdraft limit cannot be lower than current account balance");
 
             this.overdraftLimit = overdraftLimit * -1;
         }
@@ -60,8 +60,8 @@ namespace BankAccounts.Rich
         
         public void ReOpen()
         {
-            if(IsOpen) return;
-            
+            if(IsOpen) throw new InvalidOperationException(("Account is already open"));
+
             IsOpen = true;
         }
 
